@@ -118,6 +118,10 @@ __pypackages__/
 # Celery stuff
 celerybeat-schedule
 celerybeat.pid
+/node_modules/
+/package-lock.json
+/package.json
+
 
 # SageMath parsed files
 *.sage.py
