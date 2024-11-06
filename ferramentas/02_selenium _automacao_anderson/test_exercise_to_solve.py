@@ -2,6 +2,7 @@ from selenium import webdriver
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
+from selenium.webdriver.common.keys import Keys  # Importa a classe Keys para enviar o Enter
 import pathlib
 import time
 from selenium.common.exceptions import UnexpectedAlertPresentException
@@ -60,17 +61,23 @@ def test_sample_page():
     except UnexpectedAlertPresentException:
         print("Alerta inesperado encontrado, mas tratado.")
     
-    # Espera para garantir que o resultado seja exibido
+    # Espera para garantir que a mensagem final seja exibida após clicar em "test"
     result_element = WebDriverWait(driver, 10).until(
-        EC.visibility_of_element_located((By.ID, "my-value"))
+        EC.visibility_of_element_located((By.ID, "result"))  # Ajuste para o ID correto
     )
+    
+    # Simula o pressionamento da tecla Enter para fechar a modal (se necessário)
+    body = driver.find_element(By.TAG_NAME, "body")  # Encontrar o body para garantir que o Enter é enviado corretamente
+    body.send_keys(Keys.ENTER)  # Simula o pressionamento da tecla Enter
+
+    # Captura o valor da mensagem final
     value = result_element.text
     print(f"Valor da mensagem final: {value}")
     
-    # Ajuste para validar apenas o código gerado (sem o prefixo)
-    expected_message = code  # Apenas o código gerado
+    # Ajuste para validar a mensagem esperada no formato correto
+    expected_message = f"It workls! {code}!"  # Mensagem esperada incluindo o código
     assert value == expected_message, \
-        f"Esperado: {expected_message}, mas obtido: {value}"
+            f"Esperado: {expected_message}, mas obtido: {value}"
     
     driver.quit()
     print("Teste concluído.")
